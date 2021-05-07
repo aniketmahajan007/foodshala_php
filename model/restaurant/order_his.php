@@ -1,5 +1,6 @@
 <?php
 require dirname(__FILE__).'/../../core/conn.php';
+# Fetching Order History
 $nums=$conn->prepare("SELECT o.order_id,o.order_date,o.tot_price,r.res_logo,r.res_name,r.res_description FROM orders o,restaurant r WHERE o.res_id=? AND o.res_id=r.res_id");
 $nums->bind_param("i",$token->iss);
 if(!$nums->execute()){
@@ -24,4 +25,5 @@ foreach ($temp_fetch as $fetch){
     $fetch['order_list']=substr($fetch['order_list'], 0, -2);
     $result[] =array('order_id'=>$fetch['order_id'],'order_date'=>$fetch['order_date'],'price'=>$fetch['tot_price'],'logo'=>$fetch['res_logo'],'res_name'=>$fetch['res_name'],'res_desc'=>$fetch['res_desc'],'order_list'=>$fetch['order_list']);
 }
+# Sending JSON response
 echo  json_encode($result);

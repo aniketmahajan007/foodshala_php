@@ -52,4 +52,5 @@ if(!$nums->execute()){
 }
 $nums->close();
 mysqli_close($conn);
+# Sending JSON response
 echo '{"status":"success"}';

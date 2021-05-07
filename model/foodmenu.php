@@ -6,6 +6,7 @@ if(strlen($token) > 10){
     exit();
 }
 require dirname(__FILE__) . '/../core/conn.php';
+# Fetch All food details
 $query = mysqli_query($conn,"SELECT f.food_name,f.food_description,f.price,f.food_img,r.res_name,r.res_logo,r.res_description FROM food_items f,restaurant r WHERE f.res_id=r.res_id");
 $result = [];
 while($fetch = mysqli_fetch_array($query)){

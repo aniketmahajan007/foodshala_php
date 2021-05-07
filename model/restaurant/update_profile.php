@@ -13,6 +13,7 @@ $check = @getimagesize($_FILES["res_img"]["tmp_name"]);
 if(!$check){
     echo '{"status":"invalid_img"}';exit();
 }
+# Checking image size
 $cur_size=$_FILES["res_img"]["size"];
 if($cur_size>2024000){
     echo '{"status":"img_size"}';exit();
@@ -38,6 +39,7 @@ if(!move_uploaded_file($_FILES["res_img"]["tmp_name"], dirname(__FILE__).'/../..
     echo '{"status":"error"}';exit();
 }
 require dirname(__FILE__).'/../../core/conn.php';
+# Updating to database
 $nums=$conn->prepare("UPDATE restaurant SET res_name=?,res_description=?,address=?,mob_number=?,res_logo=? WHERE res_id=? LIMIT 1");
 $nums->bind_param("sssssi",$res_name,$res_desc,$res_address,$mob_number,$ImageName,$token->iss);
 if(!$nums->execute()){
@@ -49,4 +51,5 @@ if(!$nums->execute()){
 }
 $nums->close();
 mysqli_close($conn);
+# Sending JSON response
 echo '{"status":"success"}';

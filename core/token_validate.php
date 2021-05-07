@@ -1,4 +1,5 @@
 <?php
+# Validating token
 error_reporting(E_ERROR | E_PARSE);
 require dirname(__FILE__) .'/../vendor/autoload.php';
 use \Firebase\JWT\JWT;

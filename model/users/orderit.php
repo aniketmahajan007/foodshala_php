@@ -8,6 +8,7 @@ $rest_id = (int)$_POST['rest_id'];
 $tot_item = (int)$_POST['tot_items'];
 $item_list = $_POST['item_list'];
 $i=0;
+# Checking item list ID ( Food ID )
 while($i<$tot_item){
     $item_list[$i] = (int)$item_list[$i];
     if(filter_var($item_list[$i], FILTER_VALIDATE_INT) === false){
@@ -16,12 +17,14 @@ while($i<$tot_item){
     }
     $i++;
 }
+# Converting id list to string
 $item_list_string = implode(',',$item_list);
 #connecting database
 require dirname(__FILE__).'/../../core/conn.php';
 mysqli_autocommit($conn,FALSE);
 $qsuccess=1;
 # Transaction Method
+# Getting Total Price
 $nums=$conn->prepare("SELECT sum(price) FROM food_items WHERE food_id IN (?) AND res_id = ?");
 $nums->bind_param("si",$item_list_string,$rest_id);
 if(!$nums->execute()){
@@ -31,6 +34,7 @@ if(!$nums->execute()){
 }
 if($qsuccess){
     $nums->bind_result($tot_price);$nums->fetch();$nums->close();
+    #Inserting into orders
     $nums=$conn->prepare("INSERT INTO orders (res_id, cust_id,tot_price) VALUES (?,?,?)");
     $nums->bind_param("iii",$rest_id,$token->iss,$tot_price);
     if(!$nums->execute()){
@@ -43,6 +47,7 @@ if($qsuccess){
         $i=0;
         while($i<$tot_item){
             if(!$qsuccess){break;}
+            #Inserting Order items
             $nums=$conn->prepare("INSERT INTO order_items (order_id, food_id) VALUES (?,?)");
             $nums->bind_param("ii",$order_id,$item_list[$i]);
             if(!$nums->execute()){
@@ -54,13 +59,14 @@ if($qsuccess){
     }
 }
 if($qsuccess){
+    # If all transactions good commit it
     mysqli_commit($conn);mysqli_close($conn);
     echo '{"status":"success"}';
     exit();
 }else{
+    # if one transactions fail rollback
     mysqli_rollback($conn);mysqli_close($conn);
     echo '{"status":"error"}';
     exit();
 }
-# Register Order
 

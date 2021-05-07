@@ -44,4 +44,5 @@ while ($nums->fetch()){
 }
 $nums->close();
 mysqli_close($conn);
+# Sending JSON response
 echo json_encode($result);

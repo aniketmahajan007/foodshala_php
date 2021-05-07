@@ -8,6 +8,7 @@ if (!isset($requesting) OR $requesting < 1 OR $requesting > 5) {
     echo '{"status":"invalid_request"}';
     exit();
 }
+# Controller for request which does not contain JWT token
 header("Content-Type: application/json");
 switch ($requesting) {
     case 1:

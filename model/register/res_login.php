@@ -13,12 +13,14 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) === true){
     exit();
 }
 $pass = filter_var($_POST['password'],FILTER_SANITIZE_STRING);
+# Validating Pass
 if(strlen($pass) < 5 OR $_POST['password'] != $pass){
     echo '{"status":"pass_fail"}';
     exit();
 }
 # database Connecting
 require dirname(__FILE__) . '/../../core/conn.php';
+# Checking email exist
 $nums=$conn->prepare("SELECT res_id,password FROM restaurant WHERE email=? LIMIT 1");
 $nums->bind_param("s",$email);
 if(!$nums->execute()){
@@ -42,6 +44,7 @@ if(!password_verify($pass,$fpass)){
     exit();
 }
 require dirname(__FILE__) .'/../../vendor/autoload.php';
+# Generating JWT token
 use \Firebase\JWT\JWT;
 JWT::$leeway = 60;
 require dirname(__FILE__) .'/../../core/SECRET.php';
@@ -56,4 +59,5 @@ $payload = array(
 $jwt = JWT::encode($payload, $SECRET);
 $result = [];
 $result[] = array('token' => $jwt, 'status' => 'success');
+#Sending JSON response
 echo json_encode($result);

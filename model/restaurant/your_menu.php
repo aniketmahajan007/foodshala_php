@@ -1,6 +1,7 @@
 <?php
 # Connecting to database
 require dirname(__FILE__) . '/../../core/conn.php';
+# Checking restaurant exist
 $nums=$conn->prepare("SELECT res_name FROM restaurant WHERE res_id=? LIMIT 1");
 $nums->bind_param("i",$token->iss);
 if(!$nums->execute()){
@@ -10,6 +11,7 @@ if(!$nums->execute()){
     exit();
 }
 $nums->bind_result($res_name);$nums->fetch();$nums->close();
+# If exist fetching its menu
 $nums=$conn->prepare("SELECT food_name,food_description,food_img,price,food_type FROM food_items WHERE food_items.res_id=?");
 $nums->bind_param("i",$token->iss);
 if(!$nums->execute()){
@@ -20,6 +22,7 @@ if(!$nums->execute()){
 }
 $fetch = [];
 $nums->store_result();
+# Sending JSON response
 if($nums->num_rows>0){
     $nums->bind_result($fetch['food_name'],$fetch['food_desc'],$fetch['food_img'],$fetch['price'],$fetch['food_type']);
     $result = [];

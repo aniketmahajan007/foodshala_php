@@ -10,10 +10,12 @@ if (!isset($requesting) OR $requesting < 1 OR $requesting > 6) {
 }
 header("Content-Type: application/json");
 header('Status: 200');
+# Validating token since these request can only access by register member
 require dirname(__FILE__).'/../core/token_validate.php';
 require dirname(__FILE__).'/../core/SECRET.php';
 $token = $_SERVER['HTTP_FOODSHALA'];
 $token = validate_token($token,$SECRET,$requesting);
+# Token is of restaurant not customer restrict it to access further
 if($token->aud != 0){
     echo '{"status":"restricted_token"}';
     exit();

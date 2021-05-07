@@ -18,6 +18,7 @@ if(strlen($pass) < 5 OR $_POST['password'] != $pass){
 }
 # database Connecting
 require dirname(__FILE__) . '/../../core/conn.php';
+# Checking email exist
 $nums=$conn->prepare("SELECT user_id,password FROM users WHERE email=? LIMIT 1");
 $nums->bind_param("s",$email);
 if(!$nums->execute()){
@@ -40,6 +41,7 @@ if(!password_verify($pass,$fpass)){
     echo '{"status":"invalid"}';
     exit();
 }
+# Generating JWT token
 require dirname(__FILE__) .'/../../vendor/autoload.php';
 use \Firebase\JWT\JWT;
 JWT::$leeway = 60;
@@ -55,4 +57,5 @@ $payload = array(
 $jwt = JWT::encode($payload, $SECRET);
 $result = [];
 $result[] = array('token' => $jwt, 'status' => 'success');
+# Sending JSON response
 echo json_encode($result);

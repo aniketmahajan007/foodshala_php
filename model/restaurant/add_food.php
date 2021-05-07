@@ -4,7 +4,7 @@ if($_SERVER['REQUEST_METHOD'] !== 'POST' OR !isset($_POST['food_name'],$_POST['f
     echo '{"status":"invalid"}';
     exit();
 }
-# Validatin image
+# Validating image
 if(empty($_FILES["food_img"]["name"]) OR !$_FILES["food_img"]["size"]){
     echo '{"status":"invalid_img"}';exit();
 }
@@ -13,6 +13,7 @@ $check = @getimagesize($_FILES["food_img"]["tmp_name"]);
 if(!$check){
     echo '{"status":"invalid_img"}';exit();
 }
+# Checking image size
 $cur_size=$_FILES["food_img"]["size"];
 if($cur_size>4024000){
     echo '{"status":"img_size"}';exit();
@@ -38,6 +39,7 @@ if(!move_uploaded_file($_FILES["food_img"]["tmp_name"], dirname(__FILE__).'/../.
     echo '{"status":"error"}';exit();
 }
 require dirname(__FILE__).'/../../core/conn.php';
+# Inserting into database
 $nums=$conn->prepare("INSERT INTO food_items (food_name, food_description, price, food_type, food_img, res_id) VALUES (?,?,?,?,?,?)");
 $nums->bind_param("ssiisi",$food_name,$food_desc,$price,$food_pref,$ImageName,$token->iss);
 if(!$nums->execute()){
@@ -49,4 +51,5 @@ if(!$nums->execute()){
 }
 $nums->close();
 mysqli_close($conn);
+# Sending JSON response
 echo '{"status":"success","img":"'.$ImageName.'"}';
