@@ -1,6 +1,7 @@
 <?php
 if($_SERVER['REQUEST_METHOD'] !== 'POST' OR !isset($_POST['email'],$_POST['cpassword'],$_POST['password'],$_POST['food_pre'],$_POST['address'],$_POST['state'],$_POST['city'],$_POST['res_name']) OR $_POST['food_pre']<0 OR $_POST['food_pre']>2 OR strlen($_POST['address'])<6 OR strlen($_POST['state'])<3 OR strlen($_POST['city']) < 3 OR strlen($_POST['res_name']) < 4){
-    header('Status: 400');exit();
+    header('Status: 200');
+    echo '{"status":"invalid_request"}';exit();
 }
 header('Status: 200');
 # Validating email

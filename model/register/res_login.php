@@ -1,7 +1,9 @@
 <?php
 # Validation
 if($_SERVER['REQUEST_METHOD'] !== 'POST' OR !isset($_POST['email'],$_POST['password'])){
-    header('Status: 400');exit();
+    header('Status: 200');
+    echo '{"status":"invalid_request"}';
+    exit();
 }
 header('Status: 200');
 # Validating email

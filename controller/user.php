@@ -4,7 +4,8 @@ header("Access-Control-Allow-Headers: FOODSHALA");
 ob_start();
 $requesting = $_GET['requesting'];
 if (!isset($requesting) OR $requesting < 1 OR $requesting > 6) {
-    header('Status: 400');
+    header('Status: 200');
+    echo '{"status":"invalid_request"}';
     exit();
 }
 header("Content-Type: application/json");
@@ -37,6 +38,7 @@ switch ($requesting) {
         require('../model/users/fetch_user.php');
         break;
     default:
-        header('Status: 400');
+        header('Status: 200');
+        echo '{"status":"invalid_request"}';
         break;
 }
