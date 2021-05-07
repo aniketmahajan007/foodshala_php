@@ -19,7 +19,7 @@ if($cur_size>4024000){
 }
 #sanitizing name
 $coman=array("/'/","/,/","/ /","/!/","/@/","/#/","/%/","/&/");
-$ImageName=str_replace(array('(',')','$','*','~','>','<',",","/"),'a',preg_replace($coman,"-",strtolower(mb_convert_encoding($checks,'UTF-8', 'HTML-ENTITIES'))));
+$ImageName=str_replace(array('(',')','$','*','~','>','<',",","/"),'a',preg_replace($coman,"-",strtolower($checks)));
 unset($coman);
 $ImageExt=mime_content_type($_FILES["food_img"]["tmp_name"]);
 if($ImageExt==="image/jpg" OR $ImageExt==="image/jpeg" OR $ImageExt==="image/png"){}else{

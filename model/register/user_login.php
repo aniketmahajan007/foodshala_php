@@ -37,7 +37,7 @@ $nums->bind_result($id,$fpass);$nums->fetch();$nums->close();
 #Verification
 if(!password_verify($pass,$fpass)){
     mysqli_close($conn);
-    echo '{"status":"invalidpaas"}';
+    echo '{"status":"invalid"}';
     exit();
 }
 require dirname(__FILE__) .'/../../vendor/autoload.php';
